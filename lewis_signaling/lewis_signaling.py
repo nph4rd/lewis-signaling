@@ -1,8 +1,6 @@
 import json
 import random
 import re
-from datetime import datetime
-from pathlib import Path
 from typing import cast
 
 import verifiers as vf
@@ -251,88 +249,6 @@ class LewisSignalingEnv(vf.MultiAgentEnv):
 
         # Set final response
         state["final_env_response"] = [{"role": "user", "content": self._get_final_observation(state)}]
-
-        # Write trajectory
-        self._write_trajectory(state)
-
-    def _write_trajectory(self, state: State) -> None:
-        """Write the full trajectory to a readable file."""
-        repo_dir = Path(__file__).parent.parent
-        trajectories_dir = repo_dir / "trajectories"
-        trajectories_dir.mkdir(exist_ok=True)
-
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        seed = state.get("seed", "unknown")
-        filename = f"trajectory_{timestamp}_seed{seed}.txt"
-        filepath = trajectories_dir / filename
-
-        lines = []
-        lines.append("=" * 80)
-        lines.append("LEWIS SIGNALING GAME - TRAJECTORY")
-        lines.append("=" * 80)
-        lines.append("")
-
-        # Config
-        lines.append("CONFIGURATION")
-        lines.append("-" * 40)
-        lines.append(f"Real words vocabulary: {self.config.num_real_words}")
-        lines.append(f"Alien words vocabulary: {self.config.num_alien_words}")
-        lines.append(f"Distractors: {self.config.num_distractors}")
-        lines.append("")
-
-        # Game setup
-        lines.append("GAME SETUP")
-        lines.append("-" * 40)
-        lines.append(f"Target: {state['target']}")
-        lines.append(f"Distractors: {', '.join(state['distractors'])}")
-        lines.append(f"Candidates: {', '.join(state['candidates'])}")
-        lines.append("")
-
-        # Result
-        lines.append("RESULT")
-        lines.append("-" * 40)
-        lines.append(f"Game won: {state.get('game_won', False)}")
-        lines.append(f"Sender's message: {state.get('sender_message')}")
-        lines.append(f"Receiver's choice: {state.get('receiver_choice')}")
-        lines.append(f"Correct answer: {state['target']}")
-        lines.append("")
-
-        # Conversations
-        lines.append("=" * 80)
-        lines.append("CONVERSATIONS")
-        lines.append("=" * 80)
-
-        for agent_id in ["sender", "receiver"]:
-            lines.append("")
-            lines.append(f"{'=' * 40}")
-            lines.append(agent_id.upper())
-            lines.append(f"{'=' * 40}")
-
-            messages = state.get("agent_messages", {}).get(agent_id, [])
-            for msg in messages:
-                role = msg.get("role", "unknown").upper()
-                msg_content = msg.get("content", "")
-
-                if role == "SYSTEM":
-                    lines.append("\n[SYSTEM PROMPT]")
-                    lines.append("-" * 20)
-                    lines.append(msg_content[:500] + "..." if len(msg_content) > 500 else msg_content)
-                elif role == "USER":
-                    lines.append("\n[OBSERVATION]")
-                    lines.append("-" * 20)
-                    lines.append(msg_content)
-                elif role == "ASSISTANT":
-                    lines.append("\n[RESPONSE]")
-                    lines.append("-" * 20)
-                    lines.append(msg_content)
-
-        lines.append("")
-        lines.append("=" * 80)
-        lines.append("END OF TRAJECTORY")
-        lines.append("=" * 80)
-
-        filepath.write_text("\n".join(lines))
-        print(f"\nTrajectory written to: {filepath}")
 
 
 def success_reward_func(parser, completion: Messages, **_kwargs) -> float:
