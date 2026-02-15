@@ -25,8 +25,8 @@ class LewisSignalingEnv(vf.MultiAgentEnv):
         num_train_examples: int = 1000,
         num_eval_examples: int = 100,
         num_real_words: int = 32,
-        num_alien_words: int = 16,
-        num_distractors: int = 1,
+        num_alien_words: int = 32,
+        num_distractors: int = 3,
         **kwargs,
     ):
         self.config = GameConfig(
@@ -271,7 +271,7 @@ def load_environment(
     num_train_examples: int = 1000,
     num_eval_examples: int = 100,
     num_real_words: int = 32,
-    num_alien_words: int = 16,
+    num_alien_words: int = 32,
     num_distractors: int = 3,
 ) -> vf.Environment:
     """Load the Lewis Signaling environment.

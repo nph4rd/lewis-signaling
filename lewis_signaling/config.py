@@ -12,7 +12,7 @@ class GameConfig:
     """
 
     num_real_words: int = 32  # Size of object vocabulary
-    num_alien_words: int = 16  # Size of message vocabulary
+    num_alien_words: int = 32  # Size of message vocabulary
     num_distractors: int = 3  # Number of distractors (1 = binary choice)
 
     def __post_init__(self) -> None:
