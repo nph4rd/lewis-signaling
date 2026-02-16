@@ -28,8 +28,6 @@ These are the only valid messages. The Receiver knows this same list.
 ## OUTPUT FORMAT
 
 Respond with ONLY your chosen word in <answer></answer> tags. Nothing else.
-
-<answer>zorp</answer>
 """
 
 
@@ -57,6 +55,4 @@ These words have no inherent meaning. You must learn what they signify through e
 ## OUTPUT FORMAT
 
 Respond with ONLY your chosen word in <answer></answer> tags. Nothing else.
-
-<answer>apple</answer>
 """
